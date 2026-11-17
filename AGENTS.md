@@ -31,6 +31,19 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 - `reactCompiler: true` (babel-plugin-react-compiler) — React Compiler is on; lint enforces strict `react-hooks` rules (no setState in effects, no side effects during render).
 - Tailwind **v4**, configured in CSS only: `src/app/globals.css` holds `@import "tailwindcss"`, `@theme inline`, and all shadcn theme variables. There is no `tailwind.config.*` — don't create one.
 
+## Layout & branding
+
+- `src/app/layout.tsx` renders `<Navbar />` → `<div className="flex-1">{children}</div>` → `<Footer />` (both from `src/components/HomePage/`). They're global — don't re-add them to individual pages (avoids duplicate header/footer).
+- Brand palette (use as arbitrary Tailwind values, e.g. `bg-[#6D28D9]`): bg `#F5F3FF`, primary `#6D28D9`, secondary `#C4B5FD`, text `#2E1065`, muted text `#6B7280`.
+- Logo is `public/logo.png`, 2055×765 (wide lockup): `<Image src="/logo.png" width={2055} height={765} className="h-10 w-auto" />`.
+- Stub routes exist so nav links resolve (each is a minimal placeholder page): `/tuitions`, `/pricing`, `/about`, `/sign-up`, `/sign-in`.
+
+## Icons (lucide-react)
+
+- `lucide-react` has **no brand/social icons** (no Facebook/Instagram/LinkedIn/Twitter/X) — brand logos must be inline SVG paths (see `Footer.tsx`). Don't add an icon package for them.
+- Use the suffixed import style this codebase follows: `MenuIcon`, `XIcon`, `MailIcon` (both `Menu` and `MenuIcon` are exported; pick the `*Icon` form).
+- `next/image`: the `priority` prop is **deprecated in Next 16** — use `preload` instead.
+
 ## shadcn / UI
 
 - `components.json`: style `base-nova`, RSC on, lucide icons. Primitives are **Base UI (`@base-ui/react`)**, not Radix — don't import Radix packages.
