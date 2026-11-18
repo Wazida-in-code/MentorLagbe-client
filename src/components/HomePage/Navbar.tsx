@@ -1,10 +1,11 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
-import { MenuIcon, XIcon } from "lucide-react";
-
+import { toast } from "sonner";
+import { MenuIcon, XIcon, LogOutIcon } from "lucide-react";
+import { authClient } from "@/lib/auth-client";
 
 const navLinks = [
   { name: "Home", href: "/" },
@@ -13,9 +14,69 @@ const navLinks = [
   { name: "About", href: "/about" },
 ];
 
+const roleBadgeClasses: Record<string, string> = {
+  student: "bg-[#EDE9FE] text-[#5B21B6]",
+  tutor: "bg-green-100 text-green-700",
+  admin: "bg-amber-100 text-amber-700",
+};
+
+function roleBadge(role?: string | null) {
+  const key = (role ?? "student").toLowerCase();
+  return {
+    label: key.charAt(0).toUpperCase() + key.slice(1),
+    className: roleBadgeClasses[key] ?? "bg-gray-100 text-gray-600",
+  };
+}
+
+function UserAvatar({ name, image }: { name: string; image?: string | null }) {
+  if (image) {
+    return (
+      <Image
+        src={image}
+        alt={name}
+        width={32}
+        height={32}
+        className="h-8 w-8 shrink-0 rounded-full object-cover"
+      />
+    );
+  }
+  return (
+    <span
+      aria-hidden="true"
+      className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#6D28D9] text-sm font-semibold text-white"
+    >
+      {name.trim().charAt(0).toUpperCase() || "?"}
+    </span>
+  );
+}
+
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [signingOut, setSigningOut] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
+  // null until the session request settles — renders the signed-out navbar.
+  const { data: session, refetch } = authClient.useSession();
+
+  const user = session?.user;
+  const badge = user ? roleBadge(user.role) : null;
+
+  async function handleSignOut() {
+    if (signingOut) return;
+    setSigningOut(true);
+    const { error } = await authClient.signOut();
+    // Re-read the session so the navbar flips back to Sign In / Sign Up.
+    await refetch();
+    setSigningOut(false);
+    if (error) {
+      toast.error(error.message || "Sign out failed. Please try again.");
+      return;
+    }
+    setIsMenuOpen(false);
+    // Refresh first, then announce it.
+    router.refresh();
+    toast.success("Signed out successfully!");
+  }
 
   return (
     <header className="sticky top-0 z-50 border-b border-gray-100 bg-[#F5F3FF]">
@@ -51,18 +112,66 @@ export default function Navbar() {
         </nav>
 
         <div className="hidden items-center gap-3 lg:flex">
-          <Link
-            href="/sign-up"
-            className="rounded-full bg-[#6D28D9] px-5 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#5B21B6]"
-          >
-            Sign Up
-          </Link>
-          <Link
-            href="/sign-in"
-            className="rounded-full bg-[#C4B5FD] px-5 py-2 text-sm font-semibold text-[#4C1D95] transition-colors hover:bg-[#B4A3FD]"
-          >
-            Sign In
-          </Link>
+          {user && badge ? (
+            <>
+              {/* Placeholder routes — swap href="#" for the real pages later. */}
+              <a
+                href="#"
+                onClick={(e) => e.preventDefault()}
+                className="whitespace-nowrap rounded-lg px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-100 hover:text-[#6D28D9]"
+              >
+                Dashboard
+              </a>
+              <a
+                href="#"
+                onClick={(e) => e.preventDefault()}
+                className="whitespace-nowrap rounded-lg px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-100 hover:text-[#6D28D9]"
+              >
+                Update Profile
+              </a>
+              {/* Signed in: avatar, name, role badge */}
+              <div className="flex items-center gap-2">
+                <UserAvatar name={user.name} image={user.image} />
+                {/* Name joins from xl up — at lg it would overflow the bar. */}
+                <span
+                  title={user.name}
+                  className="hidden max-w-[10rem] truncate text-sm font-semibold text-[#2E1065] xl:inline"
+                >
+                  {user.name}
+                </span>
+                <span
+                  className={`shrink-0 rounded-full px-2 py-0.5 text-[11px] font-semibold ${badge.className}`}
+                >
+                  {badge.label}
+                </span>
+              </div>
+
+              <button
+                type="button"
+                onClick={handleSignOut}
+                disabled={signingOut}
+                className="flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full border border-[#C4B5FD] bg-white px-4 py-2 text-sm font-semibold text-[#6D28D9] transition-colors hover:bg-[#F5F3FF] disabled:opacity-60"
+              >
+                <LogOutIcon className="h-4 w-4" />
+                {signingOut ? "Signing out..." : "Sign Out"}
+              </button>
+            </>
+          ) : (
+            <>
+              <Link
+                href="/sign-up"
+                className="rounded-full bg-[#6D28D9] px-5 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#5B21B6]"
+              >
+                Sign Up
+              </Link>
+              <Link
+                href="/sign-in"
+                className="rounded-full bg-[#C4B5FD] px-5 py-2 text-sm font-semibold text-[#4C1D95] transition-colors hover:bg-[#B4A3FD]"
+              >
+                Sign In
+              </Link>
+            </>
+          )}
         </div>
 
         <button
@@ -104,23 +213,72 @@ export default function Navbar() {
             })}
           </nav>
 
-          {/* Auth buttons inside the mobile menu */}
-          <div className="mt-3 flex flex-col gap-3">
-            <Link
-              href="/sign-up"
-              onClick={() => setIsMenuOpen(false)}
-              className="rounded-full bg-[#6D28D9] px-5 py-2 text-center text-sm font-semibold text-white transition-colors hover:bg-[#5B21B6]"
-            >
-              Sign Up
-            </Link>
-            <Link
-              href="/sign-in"
-              onClick={() => setIsMenuOpen(false)}
-              className="rounded-full bg-[#C4B5FD] px-5 py-2 text-center text-sm font-semibold text-[#4C1D95] transition-colors hover:bg-[#B4A3FD]"
-            >
-              Sign In
-            </Link>
-          </div>
+          {/* Auth area: account details + sign out when signed in,
+              Sign Up / Sign In buttons otherwise */}
+          {user && badge ? (
+            <div className="mt-3 flex flex-col gap-1">
+              <div className="flex items-center gap-2 rounded-lg bg-white px-3 py-2">
+                <UserAvatar name={user.name} image={user.image} />
+                <span className="min-w-0 truncate text-sm font-semibold text-[#2E1065]">
+                  {user.name}
+                </span>
+                <span
+                  className={`shrink-0 rounded-full px-2 py-0.5 text-[11px] font-semibold ${badge.className}`}
+                >
+                  {badge.label}
+                </span>
+              </div>
+
+              {/* Placeholder routes — swap href="#" for the real pages later. */}
+              <a
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setIsMenuOpen(false);
+                }}
+                className="rounded-lg px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-100 hover:text-[#6D28D9]"
+              >
+                Dashboard
+              </a>
+              <a
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setIsMenuOpen(false);
+                }}
+                className="rounded-lg px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-100 hover:text-[#6D28D9]"
+              >
+                Update Profile
+              </a>
+
+              <button
+                type="button"
+                onClick={handleSignOut}
+                disabled={signingOut}
+                className="mt-1 flex items-center justify-center gap-1.5 rounded-full border border-[#C4B5FD] bg-white px-4 py-2 text-sm font-semibold text-[#6D28D9] transition-colors hover:bg-[#F5F3FF] disabled:opacity-60"
+              >
+                <LogOutIcon className="h-4 w-4" />
+                {signingOut ? "Signing out..." : "Sign Out"}
+              </button>
+            </div>
+          ) : (
+            <div className="mt-3 flex flex-col gap-3">
+              <Link
+                href="/sign-up"
+                onClick={() => setIsMenuOpen(false)}
+                className="rounded-full bg-[#6D28D9] px-5 py-2 text-center text-sm font-semibold text-white transition-colors hover:bg-[#5B21B6]"
+              >
+                Sign Up
+              </Link>
+              <Link
+                href="/sign-in"
+                onClick={() => setIsMenuOpen(false)}
+                className="rounded-full bg-[#C4B5FD] px-5 py-2 text-center text-sm font-semibold text-[#4C1D95] transition-colors hover:bg-[#B4A3FD]"
+              >
+                Sign In
+              </Link>
+            </div>
+          )}
         </div>
       )}
     </header>
