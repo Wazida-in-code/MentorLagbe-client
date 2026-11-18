@@ -60,6 +60,8 @@ export default function Navbar() {
 
   const user = session?.user;
   const badge = user ? roleBadge(user.role) : null;
+  const role = user?.role;
+  const dashboardHref = role === "tutor" || role === "admin" ? `/dashboard/${role}` : "/dashboard/student";
 
   async function handleSignOut() {
     if (signingOut) return;
@@ -114,14 +116,12 @@ export default function Navbar() {
         <div className="hidden items-center gap-3 lg:flex">
           {user && badge ? (
             <>
-              {/* Placeholder routes — swap href="#" for the real pages later. */}
-              <a
-                href="#"
-                onClick={(e) => e.preventDefault()}
+              <Link
+                href={dashboardHref}
                 className="whitespace-nowrap rounded-lg px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-100 hover:text-[#6D28D9]"
               >
                 Dashboard
-              </a>
+              </Link>
               <a
                 href="#"
                 onClick={(e) => e.preventDefault()}
@@ -229,17 +229,15 @@ export default function Navbar() {
                 </span>
               </div>
 
-              {/* Placeholder routes — swap href="#" for the real pages later. */}
-              <a
-                href="#"
-                onClick={(e) => {
-                  e.preventDefault();
-                  setIsMenuOpen(false);
-                }}
+              {/* Dashboard goes to this user's role route; Update Profile
+                  stays a placeholder until its page exists. */}
+              <Link
+                href={dashboardHref}
+                onClick={() => setIsMenuOpen(false)}
                 className="rounded-lg px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-100 hover:text-[#6D28D9]"
               >
                 Dashboard
-              </a>
+              </Link>
               <a
                 href="#"
                 onClick={(e) => {
