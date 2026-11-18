@@ -36,7 +36,16 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 - `src/app/layout.tsx` renders `<Navbar />` → `<div className="flex-1">{children}</div>` → `<Footer />` (both from `src/components/HomePage/`). They're global — don't re-add them to individual pages (avoids duplicate header/footer).
 - Brand palette (use as arbitrary Tailwind values, e.g. `bg-[#6D28D9]`): bg `#F5F3FF`, primary `#6D28D9`, secondary `#C4B5FD`, text `#2E1065`, muted text `#6B7280`.
 - Logo is `public/logo.png`, 2055×765 (wide lockup): `<Image src="/logo.png" width={2055} height={765} className="h-10 w-auto" />`.
-- Stub routes exist so nav links resolve (each is a minimal placeholder page): `/tuitions`, `/pricing`, `/about`, `/sign-up`, `/sign-in`.
+- Stub routes exist so nav links resolve (each is a minimal placeholder page): `/tuitions`, `/pricing`, `/about`, `/sign-in`. `/sign-up` is fully implemented (see Authentication).
+
+## Authentication (better-auth)
+
+- **better-auth 1.7.25** + MongoDB Atlas. Server config: `src/lib/auth.ts` (MongoDB adapter, DB `MentorLagbe`); client: `src/lib/auth-client.ts`; catch-all route: `src/app/api/auth/[...all]/route.ts`. Connection string lives in `.env` as `BETTER_AUTH_DB_URI` — never read it into chat, never overwrite `.env`.
+- Custom user fields are declared in `user.additionalFields` in `src/lib/auth.ts`: `role` (`student` | `tutor` | `admin`), `plan` (`free` | `pro`), optional `phone`/`bio`.
+- **Security rules (don't weaken these):** `plan` has `input: false` + `defaultValue: "free"` (better-auth forces the default on create — clients can never set a plan), and a `databaseHooks.user.create.before` hook sanitizes `role` to `student`/`tutor` only (public registration can never create an admin). The hook is required because better-auth does **not** validate enum values on input.
+- To make `authClient.signUp.email({ ..., role })` type-check, the client uses `inferAdditionalFields<typeof auth>()` from `better-auth/client/plugins` (type-only import of the server config — erased at compile time).
+- Password rule: better-auth default **min 8 chars** (no override in config). Sign-up rate limit: **3 requests / 10 s** (built-in rule) — wait ~10 s between test sign-ups or you'll get 429.
+- Toasts: **sonner** (`npm install sonner`); `<Toaster position="top-center" richColors />` is mounted once in `src/app/layout.tsx`. Use `toast.success(...)` from any client component.
 
 ## Icons (lucide-react)
 

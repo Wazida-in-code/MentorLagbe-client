@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { Toaster } from "sonner";
 import Navbar from "@/components/HomePage/Navbar";
 import Footer from "@/components/HomePage/Footer";
 
@@ -30,6 +31,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         {/* flex-1 makes the content area fill empty space, so the footer sits at the bottom of the page */}
         <div className="flex-1">{children}</div>
         <Footer />
+        {/* Toasts (e.g. sign-up success) shown across all pages */}
+        <Toaster position="top-center" richColors />
         </body>
     </html>
   );

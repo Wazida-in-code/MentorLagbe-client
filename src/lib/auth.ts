@@ -9,6 +9,34 @@ export const auth = betterAuth({
     emailAndPassword: { 
     enabled: true, 
   }, 
+  // Extra user fields we store in MongoDB (on top of name/email/image).
+  user: {
+    additionalFields: {
+      role: {
+        // "admin" is part of the model, but never given out on public sign-up
+        // (see the database hook below).
+        type: ["student", "tutor", "admin"],
+        input: true, // the sign-up form may send it
+        defaultValue: "student",
+      },
+      plan: {
+        type: ["free", "pro"],
+        input: false,
+        defaultValue: "free",
+      },
+      phone: {
+        type: "string",
+        required: false, // optional, not part of sign-up
+        input: true,
+      },
+      bio: {
+        type: "string",
+        required: false, // optional, not part of sign-up
+        input: true,
+      },
+    },
+  },
+  
   database: mongodbAdapter(db, {
     client,
   }),
