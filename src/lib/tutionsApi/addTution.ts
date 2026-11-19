@@ -4,7 +4,7 @@ const BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";
 
 export const createTution = async (data: TuitionDataType) => {
-  const res = await fetch(`${BASE_URL}/tutions`, {
+  const res = await fetch(`${BASE_URL}/tuition`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -13,3 +13,10 @@ export const createTution = async (data: TuitionDataType) => {
   });
   return res.json()
 };
+
+
+
+export const getTuition = async () => {
+    const res = await fetch(`${BASE_URL}/tuition`);
+    return res.json()
+}

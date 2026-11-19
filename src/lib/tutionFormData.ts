@@ -11,3 +11,11 @@ export interface TuitionDataType {
   tutorName: string;
   tutorEmail: string;
 }
+
+
+export interface TuitionType extends TuitionDataType {
+  _id: string;
+  approvalStatus: "pending" | "approved" | "rejected";
+  isActive: boolean;
+  createdAt: Date;
+}
