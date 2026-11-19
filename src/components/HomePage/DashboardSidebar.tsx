@@ -11,6 +11,8 @@ import {
 } from "@/components/ui/sidebar";
 import { useSession } from "@/lib/auth-client";
 import { BookOpen, CreditCard, FileText, LayoutDashboard, PlusCircle, UserRound, Users } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
 
 const menuItemsByRole = {
   student: [
@@ -38,7 +40,7 @@ const menuItemsByRole = {
     {
       id: 2,
       name: "Post a Tuition",
-      url: "/dashboard/tutor/post-tuition",
+      url: "/dashboard/tutor/add-tuition",
       icon: PlusCircle,
     },
     {
@@ -95,19 +97,15 @@ export function DashboardSidebar() {
   const { data: session } = useSession();
   const user = session?.user;
   const role = user?.role || "student";
-  // Fall back to the student list if the role is missing or unknown,
-  // so an unexpected value can never crash the sidebar.
   const menuItems = [
     ...(menuItemsByRole[role] ?? menuItemsByRole.student),
     ...commonMenuItems,
   ];
 
-  // ---- Values for the profile box at the top of the sidebar ----
   const name = user?.name || "Guest";
   const image = user?.image || "";
   const roleLabel = role.charAt(0).toUpperCase() + role.slice(1);
 
-  // One badge color per role.
   let roleColor = "bg-[#EDE9FE] text-[#5B21B6]"; // student: purple
   if (role === "tutor") roleColor = "bg-green-100 text-green-700";
   if (role === "admin") roleColor = "bg-amber-100 text-amber-700";
@@ -119,10 +117,8 @@ export function DashboardSidebar() {
         <div className="rounded-xl bg-gradient-to-br from-[#6D28D9] to-[#4C1D95] p-4 shadow-md">
           <div className="flex items-center gap-3">
             {image ? (
-              // User avatars can come from any host (imgbb, Google, ...),
-              // which next/image blocks — a plain img is the simple fix.
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
+              <Image width={2055}
+                height={765}
                 src={image}
                 alt={name}
                 className="h-12 w-12 shrink-0 rounded-full border-2 border-white/70 object-cover"
@@ -154,7 +150,7 @@ export function DashboardSidebar() {
             {
               menuItems.map((item) => (
                 <SidebarMenuItem key={item.id}>
-                  <SidebarMenuButton render={<a href={item.url} />}>
+                  <SidebarMenuButton render={<Link href={item.url} />}>
                     <item.icon />
                     <span>{item.name}</span>
                   </SidebarMenuButton>
