@@ -15,8 +15,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { getTuition } from "@/lib/tutionsApi/addTution";
-import { TuitionType } from "@/lib/tutionFormData";
 import DeleteTuition from "@/components/ExtraActivityPages/DeleteTuition";
+import { TuitionType } from "@/lib/tutionFormData";
 
 const MyTuitionPage = async() => {
     const tuitions: TuitionType[] = await getTuition()

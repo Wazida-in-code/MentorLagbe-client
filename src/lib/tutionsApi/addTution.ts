@@ -16,8 +16,8 @@ export const createTution = async (data: TuitionDataType) => {
 
 
 
-export const getTuition = async () => {
-    const res = await fetch(`${BASE_URL}/tuition`);
+export const getTuition = async (query = '') => {
+    const res = await fetch(`${BASE_URL}/tuition?${query}`);
     return res.json()
 }
 
