@@ -20,3 +20,11 @@ export const getTuition = async () => {
     const res = await fetch(`${BASE_URL}/tuition`);
     return res.json()
 }
+
+
+export const DeleteTuitionId = async( tuitionId : string ) => {
+        const res = await fetch(`${BASE_URL}/tuition/${tuitionId}`, {
+            method: "DELETE",
+        })
+        return res.json();
+    }

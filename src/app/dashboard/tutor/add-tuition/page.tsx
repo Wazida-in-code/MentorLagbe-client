@@ -362,9 +362,6 @@ export default function AddTuitionPage() {
                   placeholder="Tell students what you cover, your teaching style, your experience…"
                   className={`${inputClass} resize-y`}
                 />
-                <span className="max-w-[200px] truncate text-sm text-muted-foreground">
-                  {imageFile ? imageFile.name : "No image selected"}
-                </span>
               </div>
             </div>
           </section>

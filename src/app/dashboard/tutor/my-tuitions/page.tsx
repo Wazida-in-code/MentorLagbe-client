@@ -16,6 +16,7 @@ import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { getTuition } from "@/lib/tutionsApi/addTution";
 import { TuitionType } from "@/lib/tutionFormData";
+import DeleteTuition from "@/components/ExtraActivityPages/DeleteTuition";
 
 const MyTuitionPage = async() => {
     const tuitions: TuitionType[] = await getTuition()
@@ -150,15 +151,7 @@ const MyTuitionPage = async() => {
                         </Link>
 
                         {/* Delete */}
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          
-                          className="text-red-500 hover:bg-red-50 hover:text-red-600"
-                          title="Delete tuition"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
+                        <DeleteTuition tuition={tuition} />
                       </div>
                     </TableCell>
                   </TableRow>
