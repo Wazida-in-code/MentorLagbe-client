@@ -19,3 +19,18 @@ export interface TuitionType extends TuitionDataType {
   isActive: boolean;
   createdAt: Date;
 }
+
+
+export type ApplicationData = {
+  tuitionId: string;
+  userId: string;
+  email: string;
+  tuitionTitle: string;
+  subject: string;
+  monthlyFee: number;
+  tutorEmail: string;
+  studentPhone: string;
+  studentName: string;
+  preferredSchedule: string;
+  studentNote?: string;
+};

@@ -11,9 +11,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { toast } from "sonner";
 import { getTuition } from "@/lib/tutionsApi/addTution";
 import DeleteTuition from "@/components/ExtraActivityPages/DeleteTuition";
 import { TuitionType } from "@/lib/tutionFormData";
@@ -134,7 +132,7 @@ const MyTuitionPage = async() => {
                       <div className="flex items-center justify-center gap-1">
                         {/* View */}
                         <Link
-                          href={`/tuitions/${tuition._id}`}
+                          href={`/browse-tuition/${tuition._id}`}
                           title="View tuition"
                           className="inline-flex h-9 w-9 items-center justify-center rounded-md text-blue-600 hover:bg-blue-50"
                         >

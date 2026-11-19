@@ -4,8 +4,8 @@ import { PlusIcon } from "lucide-react";
 import { toast } from "sonner";
 import { useState, type ChangeEvent, type FormEvent } from "react";
 import { createTution } from "@/lib/tutionsApi/addTution";
-import { TuitionDataType } from "@/lib/tutionFormData";
 import { useRouter } from "next/navigation";
+import { TuitionDataType } from "@/lib/tutionFormData";
 
 const inputClass =
   "w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-[#2E1065] placeholder:text-gray-400 focus:border-[#6D28D9] focus:outline-none focus:ring-2 focus:ring-[#6D28D9]/20";

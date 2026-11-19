@@ -1,7 +1,6 @@
 import { TuitionDataType } from "../tutionFormData";
 
-const BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";
+const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";
 
 export const createTution = async (data: TuitionDataType) => {
   const res = await fetch(`${BASE_URL}/tuition`, {
@@ -16,8 +15,13 @@ export const createTution = async (data: TuitionDataType) => {
 
 
 
-export const getTuition = async (query = '') => {
-    const res = await fetch(`${BASE_URL}/tuition?${query}`);
+export const getBrowseTuition = async (query = '') => {
+    const res = await fetch(`${BASE_URL}/browse-tuition?${query}`);
+    return res.json()
+}
+
+export const getTuition = async () => {
+    const res = await fetch(`${BASE_URL}/tuition`);
     return res.json()
 }
 
@@ -28,3 +32,9 @@ export const DeleteTuitionId = async( tuitionId : string ) => {
         })
         return res.json();
     }
+
+
+export const getTuitionById = async(tuitionId:string) => {
+  const res = await fetch(`${BASE_URL}/tuitions/${tuitionId}`)
+  return res.json()
+}

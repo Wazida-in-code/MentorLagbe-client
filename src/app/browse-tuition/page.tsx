@@ -6,7 +6,7 @@ import {
   TriangleAlertIcon,
   WalletIcon,
 } from "lucide-react";
-import { getTuition } from "@/lib/tutionsApi/addTution";
+import { getBrowseTuition, getTuition } from "@/lib/tutionsApi/addTution";
 import { TuitionType } from "@/lib/tutionFormData";
 import { Badge } from "@/components/ui/badge";
 import TuitionControls from "@/components/ExtraActivityPages/TuitionControls";
@@ -71,7 +71,7 @@ function TuitionCard({ tuition }: { tuition: TuitionType }) {
 
         {/* Button pushed to the bottom of the card */}
         <Link
-          href={`/tuitions/${tuition._id}`}
+          href={`/browse-tuition/${tuition._id}`}
           className="mt-5 block rounded-xl bg-[#6D28D9] py-2.5 text-center text-sm font-semibold text-white transition-all hover:bg-[#5B21B6]"
         >
           View Details
@@ -101,7 +101,7 @@ export default async function BrowseTuitionPage({
   let fetchError = false;
 
   try {
-    const data = await getTuition(urlParams.toString());
+    const data = await getBrowseTuition(urlParams.toString());
     if (Array.isArray(data)) {
       tuitions = data;
     } else {
