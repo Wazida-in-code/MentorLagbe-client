@@ -9,8 +9,8 @@ import {
 import { getTuition } from "@/lib/tutionsApi/addTution";
 import { TuitionType } from "@/lib/tutionFormData";
 import { Badge } from "@/components/ui/badge";
-import TuitionControls from "@/components/BrowseTuition/TuitionControls";
-import BannerImage from "@/components/BrowseTuition/BannerImage";
+import TuitionControls from "@/components/ExtraActivityPages/TuitionControls";
+import BannerImage from "@/components/ExtraActivityPages/BannerImage";
 
 // One tuition card — a plain function so it is easy to read top to bottom.
 function TuitionCard({ tuition }: { tuition: TuitionType }) {

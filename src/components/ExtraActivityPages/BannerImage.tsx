@@ -3,8 +3,6 @@
 import { useState } from "react";
 import { BookOpenIcon } from "lucide-react";
 
-// Shows the banner image, but swaps to a pretty placeholder
-// when there is no image or the link is broken.
 export default function BannerImage({
   src,
   alt,
