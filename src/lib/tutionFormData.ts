@@ -62,3 +62,13 @@ export type Application = {
   studentNote: string;
   status: string;
 };
+
+export type User = {
+  id: string;
+  _id: string;
+  name: string;
+  email: string;
+  image?: string | null;
+  role: string;
+  createdAt: string;
+};
