@@ -21,7 +21,6 @@ import { useState } from "react";
 
 const DeleteApplication = ({ app }: { app: ApplicationType }) => {
   const router = useRouter();
-  const [open, setOpen] = useState(false);
   const [selectedApp, setSelectedApp] = useState<string | null>(null);
   const handleDelete = async (id: string) => {
     const res = await DeleteApplicationId(id);

@@ -44,6 +44,7 @@ export type ApplicationType = {
   tutorName: string;
   tutorEmail: string;
   tuitionTitle: string;
+  subject: string;
   monthlyFee: number;
   status: "pending" | "accepted" | "rejected";
   appliedAt: string;
