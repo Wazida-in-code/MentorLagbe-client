@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect, useState } from "react";
@@ -13,7 +12,10 @@ import {
   X,
 } from "lucide-react";
 import { useSession } from "@/lib/auth-client";
-import { getApplications } from "@/lib/tutionsApi/applications";
+import {
+  getApplications,
+  updateApplicationStatus,
+} from "@/lib/tutionsApi/applications";
 import { Application } from "@/lib/tutionFormData";
 
 const ManageApplicantsPage = () => {
@@ -52,6 +54,15 @@ const ManageApplicantsPage = () => {
     fetchApplications();
   }, [session, isPending]);
 
+  const handleStatus = async (id: string, status: string) => {
+    const res = await updateApplicationStatus(id, { status });
+
+    if (res.modifiedCount) {
+      setApplications((prev) =>
+        prev.map((app) => (app._id === id ? { ...app, status } : app)),
+      );
+    }
+  };
   // Search and filter
   const filteredApplications = applications.filter((app) => {
     const matchesSearch =
@@ -59,8 +70,7 @@ const ManageApplicantsPage = () => {
       app.tuitionTitle?.toLowerCase().includes(search.toLowerCase()) ||
       app.email?.toLowerCase().includes(search.toLowerCase());
 
-    const matchesFilter =
-      filter === "all" || app.status === filter;
+    const matchesFilter = filter === "all" || app.status === filter;
 
     return matchesSearch && matchesFilter;
   });
@@ -93,7 +103,7 @@ const ManageApplicantsPage = () => {
     },
   ];
 
-  const getStatusStyle = (status:string) => {
+  const getStatusStyle = (status: string) => {
     if (status === "accepted") {
       return "bg-green-50 text-green-700 border-green-200";
     }
@@ -105,18 +115,17 @@ const ManageApplicantsPage = () => {
     return "bg-amber-50 text-amber-700 border-amber-200";
   };
 
- if (isPending || (session?.user?.email && loading)) {
-  return (
-    <div className="flex min-h-[60vh] items-center justify-center">
-      <p className="text-gray-500">Loading applications...</p>
-    </div>
-  );
-}
+  if (isPending || (session?.user?.email && loading)) {
+    return (
+      <div className="flex min-h-[60vh] items-center justify-center">
+        <p className="text-gray-500">Loading applications...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#F8F7FC] p-4 md:p-6 lg:p-8">
       <div className="mx-auto max-w-7xl space-y-7">
-
         {/* Header */}
         <div>
           <div className="flex items-center gap-2 text-sm text-gray-500">
@@ -177,7 +186,6 @@ const ManageApplicantsPage = () => {
 
         {/* Applications Table */}
         <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
-
           {/* Search and Filter */}
           <div className="border-b border-gray-100 p-5">
             <div className="flex flex-col justify-between gap-4 lg:flex-row lg:items-center">
@@ -238,8 +246,10 @@ const ManageApplicantsPage = () => {
 
               <tbody className="divide-y divide-gray-100">
                 {filteredApplications.map((app) => (
-                  <tr key={app._id} className="transition hover:bg-purple-50/30">
-
+                  <tr
+                    key={app._id}
+                    className="transition hover:bg-purple-50/30"
+                  >
                     {/* Student Info */}
                     <td className="px-5 py-5">
                       <div className="flex items-center gap-3">
@@ -250,9 +260,7 @@ const ManageApplicantsPage = () => {
                           <p className="whitespace-nowrap text-sm font-semibold text-gray-800">
                             {app.studentName || "Student"}
                           </p>
-                          <p className="mt-1 text-xs text-gray-400">
-                            Student
-                          </p>
+                          <p className="mt-1 text-xs text-gray-400">Student</p>
                         </div>
                       </div>
                     </td>
@@ -300,29 +308,35 @@ const ManageApplicantsPage = () => {
 
                     {/* Actions */}
                     <td className="px-5 py-5">
-                      {app.status === "pending" ? (
-                        <div className="flex items-center justify-center gap-2">
-                          <button
-                            type="button"
-                            title="Accept Application"
-                            className="flex h-9 w-9 items-center justify-center rounded-lg bg-green-50 text-green-600 transition hover:bg-green-600 hover:text-white"
-                          >
-                            <Check size={17} />
-                          </button>
+                      <div className="flex items-center justify-center gap-2">
+                        {/* Accept Button */}
+                        <button
+                          type="button"
+                          onClick={() => handleStatus(app._id, "accepted")}
+                          title="Accept Application"
+                          className={`flex h-9 w-9 items-center justify-center rounded-lg transition ${
+                            app.status === "accepted"
+                              ? "bg-green-600 text-white"
+                              : "bg-green-50 text-green-600 hover:bg-green-600 hover:text-white"
+                          }`}
+                        >
+                          <Check size={17} />
+                        </button>
 
-                          <button
-                            type="button"
-                            title="Reject Application"
-                            className="flex h-9 w-9 items-center justify-center rounded-lg bg-red-50 text-red-600 transition hover:bg-red-600 hover:text-white"
-                          >
-                            <X size={17} />
-                          </button>
-                        </div>
-                      ) : (
-                        <p className="text-center text-xs text-gray-400">
-                          No action needed
-                        </p>
-                      )}
+                        {/* Reject Button */}
+                        <button
+                          type="button"
+                          onClick={() => handleStatus(app._id, "rejected")}
+                          title="Reject Application"
+                          className={`flex h-9 w-9 items-center justify-center rounded-lg transition ${
+                            app.status === "rejected"
+                              ? "bg-red-600 text-white"
+                              : "bg-red-50 text-red-600 hover:bg-red-600 hover:text-white"
+                          }`}
+                        >
+                          <X size={17} />
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -342,16 +356,6 @@ const ManageApplicantsPage = () => {
                 )}
               </tbody>
             </table>
-          </div>
-
-          {/* Footer */}
-          <div className="flex flex-col items-center justify-between gap-3 border-t border-gray-100 px-5 py-4 sm:flex-row">
-            <p className="text-xs text-gray-500">
-              Showing {filteredApplications.length} applications
-            </p>
-            <p className="text-xs text-gray-400">
-              MentorLagbe Dashboard
-            </p>
           </div>
         </div>
       </div>
