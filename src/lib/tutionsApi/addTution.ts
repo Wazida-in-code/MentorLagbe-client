@@ -20,8 +20,8 @@ export const getBrowseTuition = async (query = '') => {
     return res.json()
 }
 
-export const getTuition = async () => {
-    const res = await fetch(`${BASE_URL}/tuition`);
+export const getTuition = async (tutorId: string) => {
+    const res = await fetch(`${BASE_URL}/tuition?tutorId=${tutorId}`);
     return res.json()
 }
 

@@ -280,7 +280,7 @@ const StudentDashboardPage = async () => {
                 <p className="pt-1 text-center text-xs text-gray-500">
                   {total === 0
                     ? "Apply to a tuition to start tracking your progress."
-                    : `${accepted} of ${total} applications accepted`}
+                    : `Accepted ${accepted} out of ${total} applications`}
                 </p>
               </div>
             </div>

@@ -6,6 +6,7 @@ import { useState, type ChangeEvent, type FormEvent } from "react";
 import { createTution } from "@/lib/tutionsApi/addTution";
 import { useRouter } from "next/navigation";
 import { TuitionDataType } from "@/lib/tutionFormData";
+import { useSession } from "@/lib/auth-client";
 
 const inputClass =
   "w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-[#2E1065] placeholder:text-gray-400 focus:border-[#6D28D9] focus:outline-none focus:ring-2 focus:ring-[#6D28D9]/20";
@@ -14,6 +15,7 @@ export default function AddTuitionPage() {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imageUrl, setImageUrl] = useState("");
   const router = useRouter();
+  const {data: session} = useSession()
 
   async function handleImageChange(event: ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0] ?? null;
@@ -89,6 +91,7 @@ export default function AddTuitionPage() {
       description: data.description.toString(),
       tutorName: data.tutorName.toString(),
       tutorEmail: data.tutorEmail.toString(),
+      tutorId: session?.user.id ?? ""
     };
 
     const result = await createTution(tuition);

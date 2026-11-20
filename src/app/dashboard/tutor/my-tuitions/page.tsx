@@ -15,9 +15,11 @@ import { Badge } from "@/components/ui/badge";
 import { getTuition } from "@/lib/tutionsApi/addTution";
 import DeleteTuition from "@/components/ExtraActivityPages/DeleteTuition";
 import { TuitionType } from "@/lib/tutionFormData";
+import { getSession } from "@/lib/server";
 
 const MyTuitionPage = async() => {
-    const tuitions: TuitionType[] = await getTuition()
+  const session = await getSession()
+  const tuitions: TuitionType[] = session?.user.id ? await getTuition(session.user.id): [];
   return (
     <div className="space-y-6">
       {/* Header */}

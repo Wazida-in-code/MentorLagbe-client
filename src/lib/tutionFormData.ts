@@ -10,6 +10,7 @@ export interface TuitionDataType {
   description: string;
   tutorName: string;
   tutorEmail: string;
+  tutorId: string;
 }
 
 
