@@ -20,7 +20,7 @@ import {
 } from "lucide-react";
 
 import { auth } from "@/lib/auth";
-import { getTuition, getTuitionById } from "@/lib/tutionsApi/addTution";
+import { getTuitionById } from "@/lib/tutionsApi/addTution";
 import { TuitionType } from "@/lib/tutionFormData";
 
 
@@ -101,17 +101,10 @@ function getStatus(tuition: TuitionType) {
 export default async function TuitionDetailsPage({params}: {params: Promise<{ id: string }>}) {
   const { id } = await params;
 
-  let tuitions: TuitionType[];
-
-
+  // Find the selected tuition
+  let tuition;
   try {
-    const data = await getTuition();
-
-    if (!Array.isArray(data)) {
-      throw new Error("Failed to fetch tuitions");
-    }
-
-    tuitions = data;
+    tuition = await getTuitionById(id);
   } catch {
     return (
       <div className="mx-auto max-w-6xl px-4 py-8">
@@ -136,9 +129,6 @@ export default async function TuitionDetailsPage({params}: {params: Promise<{ id
       </div>
     );
   }
-
-  // Find the selected tuition
-  const tuition = await getTuitionById(id)
 
   if (!tuition) {
     notFound();
