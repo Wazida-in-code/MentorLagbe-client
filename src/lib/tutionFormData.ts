@@ -34,3 +34,17 @@ export type ApplicationData = {
   preferredSchedule: string;
   studentNote?: string;
 };
+
+
+export type ApplicationType = {
+  _id: string;
+  tuitionId: string;
+  studentId: string;
+  studentEmail: string;
+  tutorName: string;
+  tutorEmail: string;
+  tuitionTitle: string;
+  monthlyFee: number;
+  status: "pending" | "accepted" | "rejected";
+  appliedAt: string;
+};

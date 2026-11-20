@@ -1,36 +1,10 @@
 
 import React from "react";
 import { Trash2, GraduationCap, CalendarDays, Wallet } from "lucide-react";
-
-const applications = [
-  {
-    _id: "1",
-    tuitionTitle: "Mathematics Tutor for Class 8",
-    tutorName: "Rahim Ahmed",
-    tutorEmail: "rahim@gmail.com",
-    monthlyFee: 4000,
-    appliedAt: "Nov 18, 2026",
-    status: "pending",
-  },
-  {
-    _id: "2",
-    tuitionTitle: "English Tutor for Class 6",
-    tutorName: "Karim Hasan",
-    tutorEmail: "karim@gmail.com",
-    monthlyFee: 3500,
-    appliedAt: "Nov 16, 2026",
-    status: "accepted",
-  },
-  {
-    _id: "3",
-    tuitionTitle: "Physics Tutor for Class 10",
-    tutorName: "Sakib Ahmed",
-    tutorEmail: "sakib@gmail.com",
-    monthlyFee: 5000,
-    appliedAt: "Nov 14, 2026",
-    status: "rejected",
-  },
-];
+import { getApplications } from "@/lib/tutionsApi/applications";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
+import { ApplicationType } from "@/lib/tutionFormData";
 
 const statusStyles = {
   pending: "bg-amber-50 text-amber-700 border-amber-200",
@@ -38,7 +12,11 @@ const statusStyles = {
   rejected: "bg-rose-50 text-rose-700 border-rose-200",
 };
 
-const StudentMyApplicationPage = () => {
+const StudentMyApplicationPage = async() => {
+    const session = await auth.api.getSession({
+        headers: await headers()
+    })
+    const applications:ApplicationType[] = await getApplications(`userId=${session?.user.id}`)
   return (
     <div className="min-h-screen bg-[#F8F7FC] px-4 py-8 md:px-8 lg:px-10">
       <div className="mx-auto max-w-7xl space-y-7">
