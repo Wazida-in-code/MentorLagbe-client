@@ -1,10 +1,10 @@
 
-import React from "react";
 import { Trash2, GraduationCap, CalendarDays, Wallet } from "lucide-react";
 import { getApplications } from "@/lib/tutionsApi/applications";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { ApplicationType } from "@/lib/tutionFormData";
+import DeleteApplication from "@/components/ExtraActivityPages/DeleteApplication";
 
 const statusStyles = {
   pending: "bg-amber-50 text-amber-700 border-amber-200",
@@ -148,17 +148,7 @@ const StudentMyApplicationPage = async() => {
 
                     {/* Delete */}
                     <td className="px-6 py-5 text-center">
-                      {app.status === "pending" ? (
-                        <button
-                          title="Cancel Application"
-                          aria-label="Cancel Application"
-                          className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-gray-400 transition-all hover:bg-rose-50 hover:text-rose-600"
-                        >
-                          <Trash2 size={17} />
-                        </button>
-                      ) : (
-                        <span className="text-xs text-gray-300">—</span>
-                      )}
+                      <DeleteApplication app={app} />
                     </td>
                   </tr>
                 ))}

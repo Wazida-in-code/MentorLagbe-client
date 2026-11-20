@@ -20,3 +20,12 @@ export const getApplications = async (query = '') => {
     const res = await fetch(`${BASE_URL}/applications?${query}`);
     return res.json()
 }
+
+
+export const DeleteApplicationId = async (id: string) => {
+  const res = await fetch(`${BASE_URL}/applications/${id}`, {
+    method: "DELETE",
+  });
+
+  return res.json();
+};
