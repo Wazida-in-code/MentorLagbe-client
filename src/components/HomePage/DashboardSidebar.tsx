@@ -52,7 +52,7 @@ const menuItemsByRole = {
     {
       id: 4,
       name: "Manage Applicants",
-      url: "/dashboard/tutor/applicants",
+      url: "/dashboard/tutor/manage-applicants",
       icon: Users,
     },
   ],

@@ -50,3 +50,15 @@ export type ApplicationType = {
   status: "pending" | "accepted" | "rejected";
   appliedAt: string;
 };
+
+
+export type Application = {
+  _id: string;
+  studentName?: string;
+  email: string;
+  studentPhone: string;
+  tuitionTitle: string;
+  preferredSchedule: string;
+  studentNote: string;
+  status: string;
+};
