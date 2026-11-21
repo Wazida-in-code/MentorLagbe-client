@@ -1,4 +1,3 @@
-'use client'
 import {
   Check,
   ShieldCheck,
@@ -7,8 +6,18 @@ import {
   GraduationCap,
   Sparkles,
 } from "lucide-react";
+import { redirect } from "next/navigation";
 
-export default function PricingPage() {
+export default async function PricingPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
+  const { canceled } = await searchParams;
+  if (canceled) {
+    redirect("/payment/cancel");
+  }
+
   const features = [
     "Access to premium tutor features",
     "Manage your tuition applications",
@@ -20,7 +29,6 @@ export default function PricingPage() {
   return (
     <main className="min-h-screen bg-[#FAF8FF] px-4 py-10 sm:py-12">
       <div className="mx-auto max-w-4xl">
-
         {/* Header */}
         <div className="mb-7 text-center">
           <span className="inline-flex items-center gap-1.5 rounded-full bg-[#EEE7FF] px-3 py-1.5 text-xs font-semibold text-[#8060C8]">
@@ -39,23 +47,19 @@ export default function PricingPage() {
 
         {/* Pricing Card */}
         <div className="mx-auto max-w-lg overflow-hidden rounded-2xl border border-[#E7DDFB] bg-white shadow-sm">
-
           {/* Card Header */}
           <div className="flex items-center justify-between bg-gradient-to-r from-[#8060C8] to-[#A58AE8] px-6 py-5 text-white">
             <div>
               <p className="text-xs font-medium text-purple-100">
                 PREMIUM MEMBERSHIP
               </p>
-              <h2 className="mt-1 text-xl font-bold">
-                Pro Plan
-              </h2>
+              <h2 className="mt-1 text-xl font-bold">Pro Plan</h2>
             </div>
 
             <GraduationCap size={30} />
           </div>
 
           <div className="p-6">
-
             {/* Price */}
             <p className="text-xs font-medium text-gray-500">
               Membership price
@@ -108,17 +112,17 @@ export default function PricingPage() {
             </div>
 
             {/* Pay Button */}
-            <button
-              type="button"
-              onClick={() => {
-                // TODO: Stripe Checkout integration
-              }}
+            <form action="/api/checkout_sessions" method="POST">
+              <section>
+                <button type="submit" role="link"
               className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-[#8060C8] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#6D4FB2]"
             >
               <CreditCard size={17} />
-              Continue to Payment
+              Checkout
               <ArrowRight size={16} />
-            </button>
+            </button> 
+              </section>
+            </form>
 
             {/* Secure Payment */}
             <div className="mt-4 flex items-center justify-center gap-1.5 text-[11px] text-gray-400">
