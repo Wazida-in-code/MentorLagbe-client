@@ -35,3 +35,21 @@ export const getTuitionById = async(tuitionId:string) => {
   const res = await fetch(`${BASE_URL}/tuitions/${tuitionId}`)
   return res.json()
 }
+
+
+export const getAllTuition = async () => {
+    const res = await fetch(`${BASE_URL}/admin-tuitions`)
+    return res.json()
+}
+
+
+export const updateTuitionStatus = async (tuitionId: string, approvalStatus: 'pending'|'approved'|'rejected') => {
+    const res = await fetch(`${BASE_URL}/admin-tuitions/${tuitionId}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({approvalStatus}),
+    });
+    return res.json()
+}
