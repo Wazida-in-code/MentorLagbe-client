@@ -11,6 +11,7 @@ import {
 
 import { stripe } from '@/lib/stripe';
 import { redirect } from 'next/navigation'
+import { paymentVerify } from "@/lib/payment";
 
 export default async function PaymentSuccessPage({ searchParams }:{
   searchParams: Promise<{session_id?:string}>}) {
@@ -34,10 +35,9 @@ export default async function PaymentSuccessPage({ searchParams }:{
   }
 
   if (status === 'complete' && payment_status === "paid") {
-    console.log({status, payment_status,
-    customer_email,
-    metadata,
-    payment_intent,});
+    console.log({status, payment_status, customer_email, metadata, payment_intent,});
+    const result = await paymentVerify(session_id)
+    console.log({result});
     return (
           <main className="flex min-h-[75vh] items-center justify-center bg-[#FAF8FF] px-4 py-10">
       <div className="w-full max-w-md overflow-hidden rounded-2xl border border-[#E7DDFB] bg-white shadow-sm">
