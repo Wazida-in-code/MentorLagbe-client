@@ -5,8 +5,8 @@ import { MailIcon, MapPinIcon, PhoneIcon } from "lucide-react";
 // The navigation links shown in the footer (same routes as the Navbar).
 const footerLinks = [
   { name: "Home", href: "/" },
-  { name: "Browse Tuitions", href: "/tuitions" },
-  { name: "Pro Plans", href: "/pricing" },
+  { name: "Browse Tuitions", href: "/browse-tuition" },
+  { name: "Pro Plans", href: "/payment" },
   { name: "About", href: "/about" },
 ];
 

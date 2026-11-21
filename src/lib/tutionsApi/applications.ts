@@ -13,12 +13,18 @@ export const createApplication = async (data:ApplicationData) => {
 
 
 
+export const getApplicationsCount = async (query = ''): Promise<{count:number}> => {
+  const api = `${BASE_URL}/applications/count?${query}`
+    const res = await authFetch(api)
+    return res.json()
+}
+
+
 export const getApplications = async (query = '') => {
   const api = `${BASE_URL}/applications?${query}`
     const res = await authFetch(api)
     return res.json()
 }
-
 
 export const DeleteApplicationId = async (id: string) => {
   const res = await fetch(`${BASE_URL}/applications/${id}`, {

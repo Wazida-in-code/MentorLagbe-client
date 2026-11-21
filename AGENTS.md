@@ -36,7 +36,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 - `src/app/layout.tsx` renders `<Navbar />` → `<div className="flex-1">{children}</div>` → `<Footer />` (both from `src/components/HomePage/`). They're global — don't re-add them to individual pages (avoids duplicate header/footer).
 - Brand palette (use as arbitrary Tailwind values, e.g. `bg-[#6D28D9]`): bg `#F5F3FF`, primary `#6D28D9`, secondary `#C4B5FD`, text `#2E1065`, muted text `#6B7280`.
 - Logo is `public/logo.png`, 2055×765 (wide lockup): `<Image src="/logo.png" width={2055} height={765} className="h-10 w-auto" />`.
-- Stub routes exist so nav links resolve (each is a minimal placeholder page): `/tuitions`, `/pricing`, `/about`, `/sign-in`. `/sign-up` is fully implemented (see Authentication).
+- Stub routes exist so nav links resolve (each is a minimal placeholder page): `/browse-tuition`, `/payment`, `/about`, `/sign-in`. `/sign-up` is fully implemented (see Authentication).
 
 ## Authentication (better-auth)
 

@@ -152,7 +152,7 @@ const StudentDashboardPage = async () => {
             </span>
             {plan === "free" && (
               <Link
-                href="/pricing"
+                href="/payment"
                 className="inline-flex items-center gap-1.5 rounded-xl bg-[#6D28D9] px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#5B21B6]"
               >
                 <SparklesIcon size={15} />

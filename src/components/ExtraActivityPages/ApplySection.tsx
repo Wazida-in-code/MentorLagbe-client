@@ -5,7 +5,10 @@ import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
 import { TuitionType } from "@/lib/tutionFormData";
 import { toast } from "sonner";
-import { createApplication } from "@/lib/tutionsApi/applications";
+import {
+  createApplication,
+  getApplicationsCount,
+} from "@/lib/tutionsApi/applications";
 import { Send } from "lucide-react";
 
 const ApplySection = ({ tuition }: { tuition: TuitionType }) => {
@@ -34,36 +37,43 @@ const ApplySection = ({ tuition }: { tuition: TuitionType }) => {
       return;
     }
 
-    const application = {
-      tuitionId: tuition._id,
-      userId: user.id,
-      email: user.email,
-      tuitionTitle: tuition.title,
-      subject: tuition.subject,
-      monthlyFee: tuition.monthlyFee,
-      tutorEmail: tuition.tutorEmail,
-      studentPhone: studentPhone.trim(),
-      studentName: user.name,
-      preferredSchedule: preferredSchedule.trim(),
-      studentNote: studentNote.trim(),
-    };
+    const countResult = await getApplicationsCount(`userId=${user.id}`);
 
-    try {
-      setSubmitting(true);
-      const res = await createApplication(application);
+    if (countResult.count >= 2) {
+      router.push("/payment");
+      return;
+    } else {
+      const application = {
+        tuitionId: tuition._id,
+        userId: user.id,
+        email: user.email,
+        tuitionTitle: tuition.title,
+        subject: tuition.subject,
+        monthlyFee: tuition.monthlyFee,
+        tutorEmail: tuition.tutorEmail,
+        studentPhone: studentPhone.trim(),
+        studentName: user.name,
+        preferredSchedule: preferredSchedule.trim(),
+        studentNote: studentNote.trim(),
+      };
 
-      if (res.insertedId) {
-        toast.success("Application submitted successfully!");
-        router.push("/browse-tuition");
-      } else if (res.message === "Already applied") {
-        toast.error("You have already applied for this tuition");
-      } else {
-        toast.error("Failed to submit application");
+      try {
+        setSubmitting(true);
+        const res = await createApplication(application);
+
+        if (res.insertedId) {
+          toast.success("Application submitted successfully!");
+          router.push("/browse-tuition");
+        } else if (res.message === "Already applied") {
+          toast.error("You have already applied for this tuition");
+        } else {
+          toast.error("Failed to submit application");
+        }
+      } catch (error) {
+        toast.error("Something went wrong!");
+      } finally {
+        setSubmitting(false);
       }
-    } catch (error) {
-      toast.error("Something went wrong!");
-    } finally {
-      setSubmitting(false);
     }
   };
 

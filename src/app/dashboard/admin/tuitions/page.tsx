@@ -8,9 +8,9 @@ import { getAllTuition, updateTuitionStatus } from "@/lib/tutionsApi/addTution";
 type Tuition = {
   _id: string;
   subject: string;
-  class: string;
+  classLevel: string;
   location: string;
-  salary: number;
+  monthlyFee: number;
   tutorName: string;
   approvalStatus: "pending" | "approved" | "rejected";
 };
@@ -209,7 +209,7 @@ const ManageTuitionPage = () => {
                       {tuition.subject}
                     </td>
 
-                    <td className="px-5 py-4 text-gray-600">{tuition.class}</td>
+                    <td className="px-5 py-4 text-gray-600">{tuition.classLevel}</td>
 
                     <td className="px-5 py-4 text-gray-600">
                       {tuition.tutorName}
@@ -220,7 +220,7 @@ const ManageTuitionPage = () => {
                     </td>
 
                     <td className="px-5 py-4 font-medium text-gray-700">
-                      ৳{tuition.salary}
+                      ৳{tuition.monthlyFee}
                     </td>
 
                     <td className="px-5 py-4">
