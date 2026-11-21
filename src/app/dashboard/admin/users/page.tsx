@@ -25,6 +25,7 @@ import {
 import RoleSelector from "@/components/AdminUsers/RoleSelector";
 import { getUsers } from "@/lib/user";
 import { User } from "@/lib/tutionFormData";
+import UserTableRow from "@/components/AdminUsers/RoleSelector";
 
 // Badge colors for each role.
 const roleStyles: Record<string, string> = {
@@ -111,10 +112,10 @@ export default async function AdminUsersPage({ searchParams }: PageProps) {
   }
 
   // Every user gets a role — better-auth defaults it to "student".
-  const users:User[] = response.map((user:User) => ({
+  const users: User[] = response.map((user: User) => ({
     ...user,
     role: user.role ?? "student",
-}));
+  }));
   // Page-level filters come from the URL (?q=...&role=...).
   const params = await searchParams;
   const q = (params.q ?? "").toString().trim();
@@ -266,58 +267,17 @@ export default async function AdminUsersPage({ searchParams }: PageProps) {
                       "en-US",
                       { month: "short", day: "numeric", year: "numeric" },
                     );
-                    const initials = user.name
-                      .split(" ")
-                      .map((part) => part.charAt(0))
-                      .slice(0, 2)
-                      .join("")
-                      .toUpperCase();
 
                     return (
-                      <TableRow
-                        key={user._id}
-                        className="transition-colors hover:bg-purple-50/40"
-                      >
-                        <TableCell>
-                          <div className="flex items-center gap-3">
-                            <Avatar>
-                              <AvatarImage
-                                src={user.image ?? undefined}
-                                alt={user.name}
-                              />
-                              <AvatarFallback className="bg-[#EDE9FE] text-xs font-semibold text-[#6D28D9]">
-                                {initials}
-                              </AvatarFallback>
-                            </Avatar>
-                            <span className="font-medium text-[#2E1065]">
-                              {user.name}
-                            </span>
-                          </div>
-                        </TableCell>
-                        <TableCell className="text-sm text-gray-500">
-                          {user.email}
-                        </TableCell>
-                        <TableCell>
-                          <Badge
-                            className={
-                              roleStyles[user.role] ??
-                              "border-gray-100 bg-gray-50 text-gray-600"
-                            }
-                          >
-                            {user.role.charAt(0).toUpperCase() +
-                              user.role.slice(1)}
-                          </Badge>
-                        </TableCell>
-                        <TableCell className="text-sm text-gray-500">
-                          {joined}
-                        </TableCell>
-                        <TableCell className="text-right">
-                          <RoleSelector
-                            userId={user.id}
-                            currentRole={user.role}
-                          />
-                        </TableCell>
-                      </TableRow>
+                      <UserTableRow
+                        key={user._id.toString()}
+                        userId={user._id.toString()}
+                        name={user.name}
+                        email={user.email}
+                        image={user.image}
+                        currentRole={user.role}
+                        joined={joined}
+                      />
                     );
                   })
                 ) : (
