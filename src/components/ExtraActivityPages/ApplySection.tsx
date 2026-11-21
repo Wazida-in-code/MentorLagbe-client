@@ -10,6 +10,7 @@ import {
   getApplicationsCount,
 } from "@/lib/tutionsApi/applications";
 import { Send } from "lucide-react";
+import { getProUsers } from "@/lib/user";
 
 const ApplySection = ({ tuition }: { tuition: TuitionType }) => {
   const { data: session } = useSession();
@@ -37,9 +38,12 @@ const ApplySection = ({ tuition }: { tuition: TuitionType }) => {
       return;
     }
 
+    const proUser = await getProUsers(user.id)
+    console.log(proUser);
+
     const countResult = await getApplicationsCount(`userId=${user.id}`);
 
-    if (countResult.count >= 2) {
+    if (proUser.plan !== "pro" && countResult.count >= 2) {
       router.push("/payment");
       return;
     } else {

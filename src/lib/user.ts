@@ -19,3 +19,9 @@ export const updateUserRole = async (userId: string, role: 'student'|'tutor'|'ad
     });
     return res.json()
 }
+
+
+export const getProUsers = async (userId:string) => {
+    const res = await fetch(`${BASE_URL}/users/${userId}/pro`)
+    return res.json()
+}
