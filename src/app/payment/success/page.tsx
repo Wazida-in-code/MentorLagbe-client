@@ -8,9 +8,38 @@ import {
   ShieldCheck,
 } from "lucide-react";
 
-const PaymentSuccessPage = () => {
-  return (
-    <main className="flex min-h-[75vh] items-center justify-center bg-[#FAF8FF] px-4 py-10">
+
+import { stripe } from '@/lib/stripe';
+import { redirect } from 'next/navigation'
+
+export default async function PaymentSuccessPage({ searchParams }:{
+  searchParams: Promise<{session_id?:string}>}) {
+  const { session_id } = await searchParams
+
+  if (!session_id)
+    throw new Error('Please provide a valid session_id (`cs_test_...`)')
+
+  const {
+    status,
+    payment_status,
+    customer_email,
+    metadata,
+    payment_intent,
+  } = await stripe.checkout.sessions.retrieve(session_id, {
+    expand: ['line_items', 'payment_intent']
+  })
+
+  if (status === 'open') {
+    return redirect('/')
+  }
+
+  if (status === 'complete' && payment_status === "paid") {
+    console.log({status, payment_status,
+    customer_email,
+    metadata,
+    payment_intent,});
+    return (
+          <main className="flex min-h-[75vh] items-center justify-center bg-[#FAF8FF] px-4 py-10">
       <div className="w-full max-w-md overflow-hidden rounded-2xl border border-[#E7DDFB] bg-white shadow-sm">
 
         {/* Success Header */}
@@ -93,7 +122,6 @@ const PaymentSuccessPage = () => {
         </div>
       </div>
     </main>
-  );
-};
-
-export default PaymentSuccessPage;
+    )
+  }
+}
