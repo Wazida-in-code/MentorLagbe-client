@@ -39,9 +39,8 @@ export const getTuitionsCount = async (tutorId: string): Promise<{ count: number
 
 
 export const DeleteTuitionId = async( tuitionId : string ) => {
-        const res = await fetch(`${BASE_URL}/tuition/${tuitionId}`, {
-            method: "DELETE",
-        })
+      const api = `${BASE_URL}/tuition/${tuitionId}`
+      const res = await protectedMutation(api, "DELETE" )
         return res.json();
     }
 
@@ -53,51 +52,29 @@ export const getTuitionById = async(tuitionId:string) => {
 
 
 export const getAllTuition = async () => {
-    const res = await fetch(`${BASE_URL}/admin-tuitions`)
+    const api = `${BASE_URL}/admin-tuitions`
+    const res = await protectedMutation(api, 'get')
     return res.json()
 }
 
 
 export const updateTuitionStatus = async (tuitionId: string, approvalStatus: 'pending'|'approved'|'rejected') => {
-    const res = await fetch(`${BASE_URL}/admin-tuitions/${tuitionId}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({approvalStatus}),
-    });
+    const api = `${BASE_URL}/admin-tuitions/${tuitionId}`
+    const res = await protectedMutation(api, "PATCH", {approvalStatus})
     return res.json()
 }
 
 
-export const updateTuitionActive = async (
-  id: string,
-  isActive: boolean
-) => {
-  const res = await fetch(`${BASE_URL}/tuition-status/${id}`, {
-    method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ isActive }),
-  });
-
-  if (!res.ok) {
-    throw new Error("Failed to update tuition status");
-  }
-
+export const updateTuitionActive = async (id: string,isActive: boolean) => {
+  const api = `${BASE_URL}/tuition-status/${id}`
+  const res = await protectedMutation(api, "PATCH", {isActive})
   return res.json();
 };
 
 
 export const updateTuition = async (tuitionId:string, updatedTuition:object) => {
-    const res = await fetch(`${BASE_URL}/tuition/${tuitionId}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({updatedTuition}),
-    });
+    const api = `${BASE_URL}/tuition/${tuitionId}`
+    const res = await protectedMutation(api, "PATCH", updatedTuition)
     return res.json()
 }
 

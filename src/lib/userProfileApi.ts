@@ -1,3 +1,6 @@
+'use server'
+import { protectedMutation } from "./server";
+
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";
 
 export const updateProfile = async (
@@ -6,19 +9,9 @@ export const updateProfile = async (
     name: string;
     phone: string;
     bio: string;
-    image: string;
-  }
-) => {
-  const res = await fetch(
-    `${BASE_URL}/update-profile/${id}`,
-    {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(updatedData),
-    }
-  );
+    image: string;}) => {
 
-  return res.json();
+      const api = `${BASE_URL}/update-profile/${id}`
+      const res = await protectedMutation(api, "PATCH", updatedData)
+      return res.json();
 };
