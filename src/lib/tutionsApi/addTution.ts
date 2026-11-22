@@ -2,8 +2,7 @@
 import { protectedMutation } from "../server";
 import { TuitionDataType } from "../tutionFormData";
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";
-
+const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL 
 export const createTution = async (data: TuitionDataType) => {
   const api = `${BASE_URL}/tuition`
   const res = await protectedMutation(api, 'POST', data)
