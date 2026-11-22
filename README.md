@@ -6,32 +6,45 @@ Whether you're a student looking for the right tutor or a tutor searching for te
 
 ---
 
+## 🌐 Live Project
+
+**Live Website:** [Add Your Live URL Here](YOUR_LIVE_URL_HERE)
+
+---
+
+## 🔐 Admin Credentials
+
+Use the following credentials to explore the admin dashboard:
+
+- **Email:** `ADD_ADMIN_EMAIL`
+- **Password:** `ADD_ADMIN_PASSWORD`
+
+---
+
 ## ✨ Key Features
 
 ### 👨‍🎓 For Students
-- **Browse Tuitions:** Explore available tuition opportunities.
-- **Search & Discover:** Find suitable tuitions based on your preferences.
-- **Apply for Tuition:** Submit applications with preferred schedules and personal notes.
-- **Track Applications:** Monitor application status and progress.
-- **Secure Payments:** Complete payments through Stripe Checkout.
-- **Transaction History:** Keep track of payment records.
-- **Profile Management:** Update personal information.
+- Browse and explore available tuition opportunities.
+- Search and filter tuitions based on preferences.
+- Apply for tuition with preferred schedules and personal notes.
+- Track application status and progress.
+- Make secure payments through Stripe Checkout.
+- View transaction history.
+- Update personal profile information.
 
 ### 👨‍🏫 For Tutors
-- **Create Tuition Posts:** Publish tuition opportunities with relevant details.
-- **Manage Tuitions:** Edit, activate, or close your tuition posts.
-- **Application Management:** Review student applications and manage their status.
-- **Dashboard Overview:** Monitor tuition statistics and activities.
-- **Payment Tracking:** Keep track of relevant payment information.
-- **Profile Management:** Manage tutor profile information.
+- Create and publish tuition posts.
+- Edit, activate, or close tuition posts.
+- Review and manage student applications.
+- Track tuition statistics through a personalized dashboard.
+- Manage profile information.
 
 ### 🛡️ For Administrators
-- **Admin Dashboard:** Get an overview of platform activities.
-- **User Management:** View and manage platform users.
-- **Tuition Management:** Review and manage tuition posts.
-- **Tuition Approval:** Approve or reject submitted tuition posts.
-- **Transaction Overview:** Monitor platform transactions.
-- **Platform Statistics:** View important platform metrics.
+- Monitor platform activities through an admin dashboard.
+- View and manage registered users.
+- Review and approve or reject tuition posts.
+- Monitor platform transactions.
+- View important platform statistics.
 
 ---
 
@@ -50,14 +63,33 @@ Whether you're a student looking for the right tutor or a tutor searching for te
 - Express.js
 - MongoDB
 
-### Authentication & Payments
+### Authentication & Payment
 - Better Auth
 - Stripe
 
-### Development Tools
-- Git & GitHub
-- Vercel
-- Postman
+---
+
+## 📦 NPM Packages
+
+Some of the main packages used in this project:
+
+| Package | Purpose |
+|---|---|
+| `next` | React framework |
+| `react` | UI development |
+| `typescript` | Type safety |
+| `tailwindcss` | Styling |
+| `better-auth` | Authentication |
+| `mongodb` | Database integration |
+| `stripe` | Payment processing |
+| `sonner` | Toast notifications |
+| `lucide-react` | Icons |
+| `react-icons` | Additional icons |
+| `swiper` | Responsive sliders |
+| `motion` | Animations |
+| `recharts` | Dashboard charts |
+
+*Update this list to match the packages actually installed in your project.*
 
 ---
 
@@ -125,29 +157,16 @@ MentorLagbe/
 │   └── public/
 │
 ├── backend/
-│   ├── index.js
-│   ├── routes/
-│   ├── controllers/
-│   └── config/
+│   └── index.js
 │
 └── README.md
 ```
 
-*The structure above is an illustrative overview; adjust folder names to match your actual repository.*
+*Adjust the structure according to your actual repository.*
 
 ---
 
-## 🔐 Security & Authentication
-
-- Role-based access for Students, Tutors, and Admins.
-- Protected routes and role-specific dashboards.
-- Secure authentication using Better Auth.
-- Stripe Checkout integration for payment processing.
-- Server-side validation for important operations.
-
----
-
-## 🎯 Project Goals
+## 🎯 Project Purpose
 
 MentorLagbe aims to simplify the tutoring experience by:
 
@@ -173,7 +192,7 @@ MentorLagbe aims to simplify the tutoring experience by:
 
 **Developed with ❤️ by Wazida**
 
-A learning project focused on building a practical full-stack application using modern web technologies.
+A full-stack learning project focused on building a practical tutoring platform using modern web technologies.
 
 ---
 
