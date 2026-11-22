@@ -80,7 +80,7 @@ export const updateTuition = async (tuitionId:string, updatedTuition:object) => 
 
 
 export const sixTuitions = async () => {
-  const res = await fetch(`${BASE_URL}/six-tuitions`)
+  const res = await fetch(`${BASE_URL}/six-tuitions`, {cache: 'no-store'})
   return res.json()
 }
 
