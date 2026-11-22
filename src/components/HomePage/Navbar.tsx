@@ -61,7 +61,10 @@ export default function Navbar() {
   const user = session?.user;
   const badge = user ? roleBadge(user.role) : null;
   const role = user?.role;
-  const dashboardHref = role === "tutor" || role === "admin" ? `/dashboard/${role}` : "/dashboard/student";
+  const dashboardHref =
+    role === "tutor" || role === "admin"
+      ? `/dashboard/${role}`
+      : "/dashboard/student";
 
   async function handleSignOut() {
     if (signingOut) return;
@@ -122,13 +125,13 @@ export default function Navbar() {
               >
                 Dashboard
               </Link>
-              <a
-                href="#"
-                onClick={(e) => e.preventDefault()}
-                className="whitespace-nowrap rounded-lg px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-100 hover:text-[#6D28D9]"
+              <Link
+                href="/dashboard/profile"
+                onClick={() => setIsMenuOpen(false)}
+                className="rounded-lg px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-100 hover:text-[#6D28D9]"
               >
                 Update Profile
-              </a>
+              </Link>
               {/* Signed in: avatar, name, role badge */}
               <div className="flex items-center gap-2">
                 <UserAvatar name={user.name} image={user.image} />
@@ -238,16 +241,13 @@ export default function Navbar() {
               >
                 Dashboard
               </Link>
-              <a
-                href="#"
-                onClick={(e) => {
-                  e.preventDefault();
-                  setIsMenuOpen(false);
-                }}
+              <Link
+                href="/dashboard/profile"
+                onClick={() => setIsMenuOpen(false)}
                 className="rounded-lg px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-100 hover:text-[#6D28D9]"
               >
                 Update Profile
-              </a>
+              </Link>
 
               <button
                 type="button"

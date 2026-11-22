@@ -1,3 +1,5 @@
+import Navbar from "@/components/HomePage/Navbar";
+import { getSession } from "@/lib/server";
 import {
   Check,
   ShieldCheck,
@@ -18,15 +20,37 @@ export default async function PricingPage({
     redirect("/payment/cancel");
   }
 
-  const features = [
-    "Access to premium tutor features",
-    "Manage your tuition applications",
-    "Get noticed by more students",
-    "Priority profile visibility",
-    "Dedicated tutor dashboard",
-  ];
+  const session = await getSession();
+
+  if (!session) {
+    redirect("/sign-in");
+  }
+
+  const role = session.user.role;
+
+  const isTutor = role === "tutor";
+
+  const price = isTutor ? 15 : 10;
+
+  const features = isTutor
+  ? [
+      "Post unlimited tuition opportunities",
+      "Manage your tuition applications",
+      "Get noticed by more students",
+      "Priority profile visibility",
+      "Dedicated tutor dashboard",
+    ]
+  : [
+      "Access premium student features",
+      "Apply for more tuition opportunities",
+      "Connect with more tutors",
+      "Priority application visibility",
+      "Dedicated student dashboard",
+    ];
 
   return (
+    <div>
+      <Navbar />
     <main className="min-h-screen bg-[#FAF8FF] px-4 py-10 sm:py-12">
       <div className="mx-auto max-w-4xl">
         {/* Header */}
@@ -62,12 +86,12 @@ export default async function PricingPage({
           <div className="p-6">
             {/* Price */}
             <p className="text-xs font-medium text-gray-500">
-              Membership price
+              {isTutor ? "Tutor Membership" : "Student Membership"}
             </p>
 
             <div className="mt-1 flex items-baseline gap-1.5">
               <span className="text-4xl font-extrabold text-[#302448]">
-                $10
+                ${price}
               </span>
               <span className="text-sm text-gray-500">/ month</span>
             </div>
@@ -100,27 +124,29 @@ export default async function PricingPage({
 
               <div className="flex justify-between text-xs text-gray-500">
                 <span>Pro Membership (1 month)</span>
-                <span>$10</span>
+                <span>${price}</span>
               </div>
 
               <div className="my-3 border-t border-dashed border-[#DED4F0]" />
 
               <div className="flex justify-between text-sm font-bold text-[#302448]">
                 <span>Total Payable</span>
-                <span>$10</span>
+                <span>${price}</span>
               </div>
             </div>
 
             {/* Pay Button */}
             <form action="/api/checkout_sessions" method="POST">
               <section>
-                <button type="submit" role="link"
-              className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-[#8060C8] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#6D4FB2]"
-            >
-              <CreditCard size={17} />
-              Checkout
-              <ArrowRight size={16} />
-            </button> 
+                <button
+                  type="submit"
+                  role="link"
+                  className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-[#8060C8] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#6D4FB2]"
+                >
+                  <CreditCard size={17} />
+                  Checkout
+                  <ArrowRight size={16} />
+                </button>
               </section>
             </form>
 
@@ -137,5 +163,6 @@ export default async function PricingPage({
         </p>
       </div>
     </main>
+    </div>
   );
 }

@@ -16,6 +16,8 @@ const StudentMyApplicationPage = async() => {
     const session = await auth.api.getSession({
         headers: await headers()
     })
+        console.log(session, "my-application");
+
     const applications:ApplicationType[] = await getApplications(`userId=${session?.user.id}`)
   return (
     <div className="min-h-screen bg-[#F8F7FC] px-4 py-8 md:px-8 lg:px-10">

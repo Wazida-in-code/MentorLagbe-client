@@ -72,3 +72,11 @@ export type User = {
   role: string;
   createdAt: string;
 };
+
+
+export interface TuitionPaginationType {
+  tuitions: TuitionType[];
+  totalTuitions: number;
+  totalPages: number;
+  currentPage: number;
+}

@@ -1,5 +1,5 @@
 'use server'
-import { authFetch } from "./server";
+import { authFetch, protectedMutation } from "./server";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";
 
@@ -10,18 +10,14 @@ export const getUsers = async () => {
 
 
 export const updateUserRole = async (userId: string, role: 'student'|'tutor'|'admin') => {
-    const res = await fetch(`${BASE_URL}/users/${userId}/role`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({role}),
-    });
+    const api = `${BASE_URL}/users/${userId}/role`
+    const res = await protectedMutation(api, "PATCH", {role})
     return res.json()
 }
 
 
 export const getProUsers = async (userId:string) => {
+    console.log(userId);
     const res = await fetch(`${BASE_URL}/users/${userId}/pro`)
     return res.json()
 }

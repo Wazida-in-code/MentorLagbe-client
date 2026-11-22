@@ -12,10 +12,24 @@ import {
 import { stripe } from '@/lib/stripe';
 import { redirect } from 'next/navigation'
 import { paymentVerify } from "@/lib/payment";
+import { getSession } from "@/lib/server";
 
 export default async function PaymentSuccessPage({ searchParams }:{
   searchParams: Promise<{session_id?:string}>}) {
   const { session_id } = await searchParams
+
+  const userSession = await getSession();
+
+if (!userSession) {
+  redirect("/sign-in");
+}
+
+const role = userSession.user.role;
+const isTutor = role === "tutor";
+
+const dashboardLink = isTutor
+  ? "/dashboard/tutor"
+  : "/dashboard/student";
 
   if (!session_id)
     throw new Error('Please provide a valid session_id (`cs_test_...`)')
@@ -53,9 +67,9 @@ export default async function PaymentSuccessPage({ searchParams }:{
             Payment Completed
           </div>
 
-          <h1 className="mt-2 text-2xl font-bold">
-            You&apos;re Now a Pro Member!
-          </h1>
+         <h1 className="mt-2 text-2xl font-bold">
+          You&apos;re Now a Pro {isTutor ? "Tutor" : "Student"}!
+         </h1>
 
           <p className="mt-2 text-sm text-purple-100">
             Welcome to MentorLagbe Pro. Your journey just got better!
@@ -101,9 +115,9 @@ export default async function PaymentSuccessPage({ searchParams }:{
 
           {/* Dashboard Button */}
           <Link
-            href="/dashboard/student"
-            className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-[#8060C8] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#6D4FB2]"
-          >
+            href={dashboardLink}
+              className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-[#8060C8] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#6D4FB2]"
+            >
             Go to Dashboard
             <ArrowRight size={17} />
           </Link>

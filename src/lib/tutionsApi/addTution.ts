@@ -11,16 +11,31 @@ export const createTution = async (data: TuitionDataType) => {
 };
 
 
+export const getBrowseTuition = async (query = "") => {
+  const res = await fetch(
+    `${BASE_URL}/browse-tuition?${query}`,
+    { cache: "no-store" }
+  );
 
-export const getBrowseTuition = async (query = '') => {
-    const res = await fetch(`${BASE_URL}/browse-tuition?${query}`);
-    return res.json()
-}
+  if (!res.ok) {
+    throw new Error("Failed to fetch tuitions");
+  }
+
+  return res.json();
+};
 
 export const getTuition = async (tutorId: string) => {
     const res = await fetch(`${BASE_URL}/tuition?tutorId=${tutorId}`);
     return res.json()
 }
+
+
+export const getTuitionsCount = async (tutorId: string): Promise<{ count: number }> => {
+  console.log(tutorId);
+  const res = await fetch(`${BASE_URL}/tuitions/count?tutorId=${tutorId}`);
+  return res.json();
+};
+
 
 
 export const DeleteTuitionId = async( tuitionId : string ) => {
@@ -52,4 +67,42 @@ export const updateTuitionStatus = async (tuitionId: string, approvalStatus: 'pe
       body: JSON.stringify({approvalStatus}),
     });
     return res.json()
+}
+
+
+export const updateTuitionActive = async (
+  id: string,
+  isActive: boolean
+) => {
+  const res = await fetch(`${BASE_URL}/tuition-status/${id}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ isActive }),
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to update tuition status");
+  }
+
+  return res.json();
+};
+
+
+export const updateTuition = async (tuitionId:string, updatedTuition:object) => {
+    const res = await fetch(`${BASE_URL}/tuition/${tuitionId}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({updatedTuition}),
+    });
+    return res.json()
+}
+
+
+export const sixTuitions = async () => {
+  const res = await fetch(`${BASE_URL}/six-tuitions`)
+  return res.json()
 }

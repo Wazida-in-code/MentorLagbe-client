@@ -3,10 +3,11 @@ import Link from "next/link";
 import { PlusIcon } from "lucide-react";
 import { toast } from "sonner";
 import { useState, type ChangeEvent, type FormEvent } from "react";
-import { createTution } from "@/lib/tutionsApi/addTution";
+import { createTution, getTuitionsCount } from "@/lib/tutionsApi/addTution";
 import { useRouter } from "next/navigation";
 import { TuitionDataType } from "@/lib/tutionFormData";
 import { useSession } from "@/lib/auth-client";
+import { getProUsers } from "@/lib/user";
 
 const inputClass =
   "w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-[#2E1065] placeholder:text-gray-400 focus:border-[#6D28D9] focus:outline-none focus:ring-2 focus:ring-[#6D28D9]/20";
@@ -15,7 +16,7 @@ export default function AddTuitionPage() {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imageUrl, setImageUrl] = useState("");
   const router = useRouter();
-  const {data: session} = useSession()
+  const { data: session } = useSession();
 
   async function handleImageChange(event: ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0] ?? null;
@@ -39,8 +40,19 @@ export default function AddTuitionPage() {
   }
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
+
     e.preventDefault();
+
     const data = Object.fromEntries(new FormData(e.currentTarget));
+    
+    const proUser = await getProUsers(session?.user.id ?? "");
+   
+    const countResult = await getTuitionsCount(session?.user.id ?? "");
+    if (proUser.plan !== "pro" && countResult.count >= 2) {
+      router.push("/payment");
+      return;
+    }
+
     console.log(data);
     if (!data.title || data.title.toString().trim().length < 10) {
       toast.error("Please write a title of at least 10 characters.");
@@ -91,7 +103,7 @@ export default function AddTuitionPage() {
       description: data.description.toString(),
       tutorName: data.tutorName.toString(),
       tutorEmail: data.tutorEmail.toString(),
-      tutorId: session?.user.id ?? ""
+      tutorId: session?.user.id ?? "",
     };
 
     const result = await createTution(tuition);

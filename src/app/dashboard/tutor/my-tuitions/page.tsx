@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Eye, Pencil, Plus, Trash2 } from "lucide-react";
+import { Eye, Plus } from "lucide-react";
 
 import {
   Table,
@@ -16,10 +16,13 @@ import { getTuition } from "@/lib/tutionsApi/addTution";
 import DeleteTuition from "@/components/ExtraActivityPages/DeleteTuition";
 import { TuitionType } from "@/lib/tutionFormData";
 import { getSession } from "@/lib/server";
+import EditTuition from "@/components/ExtraActivityPages/EditTuition";
+import UpdateTuitionActiveClose from "@/components/ExtraActivityPages/UpdateTuitionActiveClose";
 
 const MyTuitionPage = async() => {
   const session = await getSession()
   const tuitions: TuitionType[] = session?.user.id ? await getTuition(session.user.id): [];
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -118,15 +121,7 @@ const MyTuitionPage = async() => {
 
                     {/* Active Status */}
                     <TableCell>
-                      <Badge
-                        className={
-                          tuition.isActive
-                            ? "bg-green-100 text-green-700 hover:bg-green-100"
-                            : "bg-gray-100 text-gray-600 hover:bg-gray-100"
-                        }
-                      >
-                        {tuition.isActive ? "Active" : "Inactive"}
-                      </Badge>
+                      <UpdateTuitionActiveClose tuition={tuition} />
                     </TableCell>
 
                     {/* Actions */}
@@ -142,13 +137,7 @@ const MyTuitionPage = async() => {
                         </Link>
 
                         {/* Edit */}
-                        <Link
-                          href={`/dashboard/tutor/edit-tuition/${tuition._id}`}
-                          title="Edit tuition"
-                          className="inline-flex h-9 w-9 items-center justify-center rounded-md text-[#6D28D9] hover:bg-purple-50"
-                        >
-                          <Pencil className="h-4 w-4" />
-                        </Link>
+                        <EditTuition tuition={tuition} />
 
                         {/* Delete */}
                         <DeleteTuition tuition={tuition} />

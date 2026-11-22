@@ -315,12 +315,6 @@ export default async function TuitionDetailsPage({params}: {params: Promise<{ id
             </p>
           </div>
 
-          {/* Apply section */}
-          {/* <ApplySection
-            tuitionId={id}
-            // role={role}
-            // hasApplied={alreadyApplied}
-          /> */}
           <ApplySection tuition={tuition} />
 
         </div>
