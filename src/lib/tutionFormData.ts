@@ -80,3 +80,19 @@ export interface TuitionPaginationType {
   totalPages: number;
   currentPage: number;
 }
+
+
+export type TransactionType = {
+  _id: string;
+  sessionId: string;
+  status: string;
+  payment_status: string;
+  customer_email: string;
+  userId: string;
+  userName: string;
+  userRole: "student" | "tutor" | "admin";
+  userPlan: string;
+  amount: string;
+  payment_date: string | Date;
+  payment_intent: string;
+};

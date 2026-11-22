@@ -1,5 +1,6 @@
 
 import { getTransaction } from "@/lib/transaction";
+import { TransactionType } from "@/lib/tutionFormData";
 import {
   CreditCard,
   ReceiptText,
@@ -12,7 +13,7 @@ import {
 
 const TransactionsPage = async () => {
   const res = await getTransaction();
-  const transactions = Array.isArray(res) ? res : [];
+  const transactions:TransactionType[] = Array.isArray(res) ? res : [];
 
   const totalAmount = transactions.reduce(
     (total, item) => total + Number(item.amount || 0),

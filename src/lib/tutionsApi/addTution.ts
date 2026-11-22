@@ -106,3 +106,12 @@ export const sixTuitions = async () => {
   const res = await fetch(`${BASE_URL}/six-tuitions`)
   return res.json()
 }
+
+
+export const getTuitionCounts = async () => {
+  const res = await fetch(`${BASE_URL}/tuition-counts`, {
+    cache: "no-store",
+  });
+
+  return res.json();
+};
